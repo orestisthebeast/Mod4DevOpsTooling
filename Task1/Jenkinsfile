@@ -35,7 +35,7 @@ pipeline {
         stage('Test localhost') {
             steps {
                 echo 'Testing localhost..'
-                sh 'python3 /Task1/tests.py'
+                sh 'python3 ./tests.py'
             }
         }
         stage('Post Build') {
