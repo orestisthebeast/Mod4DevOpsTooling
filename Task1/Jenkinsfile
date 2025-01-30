@@ -30,6 +30,12 @@ pipeline {
                 sh 'zip trivyResults.zip *.json'
             }
         }
+        stage('Test localhost') {
+            steps {
+                echo 'Testing localhost..'
+                sh 'python3 tests.py'
+            }
+        }
         stage('Post Build') {
             steps {
                 sh 'curl -s localhost'
