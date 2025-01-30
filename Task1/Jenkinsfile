@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+    stages {
+        stage('Cleanup') {
+            steps {
+                echo 'Cleaning up previous containers..'
+                docker rm -f $(docker ps -a -q)
+            }
+        }
+        stage('Build Containers') {
+            steps {
+                echo 'Building from Dockerfile..'
+                docker build -t task1-app /Task1
+                docker build -t task1-nginx -f /Task1/nginx.Dockerfile /Task1
+            }
+        }
+        stage('Run Containers') {
+            steps {
+                echo 'Starting containers....'
+                docker run -d --name task1-app task1-app
+                docker run -d -p 80:80 --name task1-nginx --link task1-app:task1-app task1-nginx
+            }
+        }
+        stage('Post Build') {
+            steps {
+                curl -s localhost
+                echo 'Containers are up and running..hopefully'
+            }
+        }
+    }
+}
