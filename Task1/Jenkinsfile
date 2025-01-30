@@ -7,7 +7,6 @@ pipeline {
                 sh 'docker rm -f $(docker ps -a -q)'
                 }
             }
-        }
         stage('Build Containers') {
             steps {
                 echo 'Building from Dockerfile..'
@@ -29,3 +28,4 @@ pipeline {
             }
         }
     }
+}
