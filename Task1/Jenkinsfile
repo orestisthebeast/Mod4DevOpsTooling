@@ -28,6 +28,8 @@ pipeline {
                 sh 'trivy image -f json -o resultsTask1App.json task1-app'
                 sh 'trivy image -f json -o resultsTask1Nginx.json task1-nginx'
                 sh 'zip trivyResults.zip *.json'
+                archiveArtifacts artifacts: '*.zip'
+
             }
         }
         stage('Test localhost') {
