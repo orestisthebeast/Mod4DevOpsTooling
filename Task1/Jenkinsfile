@@ -22,6 +22,14 @@ pipeline {
                 sh 'docker run -d -p 80:80 --name task1-nginx --link task1-app:task1-app task1-nginx'
             }
         }
+        stage('Test Containers') {
+            steps {
+                echo 'Testing containers..'
+                sh 'trivy image -f json -o resultsTask1App.json task1-app'
+                sh 'trivy image -f json -o resultsTask1Nginx.json task1-nginx'
+                sh 'zip trivyResults.zip *.json'
+            }
+        }
         stage('Post Build') {
             steps {
                 sh 'curl -s localhost'
