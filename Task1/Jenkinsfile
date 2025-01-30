@@ -5,13 +5,14 @@ pipeline {
             steps {
                 echo 'Cleaning up previous containers..'
                 sh 'docker ps -a -q | grep . && docker rm -f $(docker ps -a -q) || true'
-                }
+                sh 'pwd && ls -la'
             }
+        }
         stage('Build Containers') {
             steps {
                 echo 'Building from Dockerfile..'
                 sh 'docker build -t task1-app .'
-                sh 'docker build -t task1-nginx -f /nginx.Dockerfile .'
+                sh 'docker build -t task1-nginx -f nginx.Dockerfile .'
             }
         }
         stage('Run Containers') {
