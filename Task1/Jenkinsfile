@@ -27,7 +27,7 @@ pipeline {
                 echo 'Testing containers..'
                 sh 'trivy image -f json -o resultsTask1App.json task1-app'
                 sh 'trivy image -f json -o resultsTask1Nginx.json task1-nginx'
-                sh ''
+                sh 'trivy fs --format json --output resultsFilesystem.json $(pwd)'
                 sh 'zip trivyResults.zip *.json'
                 archiveArtifacts artifacts: '*.zip'
 
