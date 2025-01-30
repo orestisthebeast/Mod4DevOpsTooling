@@ -10,8 +10,8 @@ pipeline {
         stage('Build Containers') {
             steps {
                 echo 'Building from Dockerfile..'
-                sh 'docker build -t task1-app /Task1'
-                sh 'docker build -t task1-nginx -f /Task1/nginx.Dockerfile /Task1'
+                sh 'docker build -t task1-app .'
+                sh 'docker build -t task1-nginx -f /nginx.Dockerfile .'
             }
         }
         stage('Run Containers') {
