@@ -4,7 +4,7 @@ pipeline {
         stage('Cleanup') {
             steps {
                 echo 'Cleaning up previous containers..'
-                sh 'docker rm -f $(docker ps -a -q)'
+                sh 'docker ps -a -q | grep . && docker rm -f $(docker ps -a -q) || true'
                 }
             }
         stage('Build Containers') {
