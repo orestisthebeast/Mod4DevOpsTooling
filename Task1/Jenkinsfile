@@ -12,7 +12,7 @@ pipeline {
             steps {
                 echo 'Building from Dockerfile..'
                 sh 'docker build -t task1-app Task1'
-                sh 'docker build -t task1-nginx -f Task1/nginx.Dockerfile .'
+                sh 'docker build -t task1-nginx -f Task1/nginx.Dockerfile Task1'
             }
         }
         stage('Run Containers') {
