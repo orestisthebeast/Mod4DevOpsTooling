@@ -27,6 +27,7 @@ pipeline {
                 echo 'Testing containers..'
                 sh 'trivy image -f json -o resultsTask1App.json task1-app'
                 sh 'trivy image -f json -o resultsTask1Nginx.json task1-nginx'
+                sh ''
                 sh 'zip trivyResults.zip *.json'
                 archiveArtifacts artifacts: '*.zip'
 
@@ -35,7 +36,7 @@ pipeline {
         stage('Test localhost') {
             steps {
                 echo 'Testing localhost..'
-                sh 'python3 ./tests.py'
+                sh 'python3 Task1/tests.py'
             }
         }
         stage('Post Build') {
