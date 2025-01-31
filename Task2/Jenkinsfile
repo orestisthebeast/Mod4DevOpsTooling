@@ -21,8 +21,8 @@ pipeline {
         stage('Build Containers') {
             steps {
                 echo 'Building from Dockerfile..'
-                sh 'docker build -t my_flask_image ./flask-app'
-                sh 'build -t my_mysql_image ./db'
+                sh 'docker build -t my_flask_image Task2/flask-app'
+                sh 'build -t my_mysql_image Task2/db'
             }
         }
         stage('Run Containers') {
