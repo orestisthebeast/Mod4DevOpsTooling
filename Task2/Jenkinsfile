@@ -47,7 +47,7 @@ pipeline {
                 script {
                     withCredentials([string(credentialsId: 'sonarqube-PAT', variable: 'SONARQUBE_TOKEN')]) {
                         sh """
-                        docker run --rm --network sonarqube \
+                        docker run --rm --network my_network \
                             -e SONAR_HOST_URL=\${SONARQUBE_HOST} \
                             -e SONAR_LOGIN=\${SONARQUBE_TOKEN} \
                             -v \${WORKSPACE}:/user/src \
