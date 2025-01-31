@@ -14,8 +14,8 @@ pipeline {
         stage('Build infrastructure') {
             steps {
                 echo 'Building network and colume:'
-                sh 'docker network create my_network'
-                sh 'docker volume create my_volume'
+                sh 'docker network create my_network || true'
+                sh 'docker volume create my_volume || true'
             }
         }
         stage('Build Containers') {
