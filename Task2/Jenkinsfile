@@ -28,7 +28,7 @@ pipeline {
         stage('Run Containers') {
             steps {
                 echo 'Starting containers....'
-                sh 'docker run -d --name mysql_container --network my_network --network-alias mysql --mount type=volume,source=new-volume,target=/var/lib/mysql my_mysql_image'
+                sh 'docker run -d --name mysql_container --network my_network --network-alias mysql --mount type=volume,source=my_volume,target=/var/lib/mysql my_mysql_image'
                 sh 'docker run -d -p 5000:5000 --name flask_container --network my_network my_flask_image'
                 sh 'docker run -d -p 80:80 --name nginx_container --network my_network --mount type=bind,source=$(pwd)/nginx/nginx.conf,target=/etc/nginx/nginx.conf nginx'
             }
