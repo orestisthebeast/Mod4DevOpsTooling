@@ -48,14 +48,14 @@ pipeline {
                     withCredentials([string(credentialsId: 'sonarqube-PAT', variable: 'SONARQUBE_TOKEN')]) {
                         sh """
                         docker run --rm --network my_network \
-                            -e SONAR_HOST_URL=\${SONARQUBE_HOST} \
-                            -e SONAR_LOGIN=\${SONARQUBE_TOKEN} \
-                            -v \${WORKSPACE}:/user/src \
+                            -e SONAR_HOST_URL=${SONARQUBE_HOST} \
+                            -e SONAR_LOGIN=${SONARQUBE_TOKEN} \
+                            -v ${WORKSPACE}:/usr/src \
                             sonarsource/sonar-scanner-cli \
                             -Dsonar.projectKey=task2 \
-                            -Dsonar.sources=. \
-                            -Dsonar.host.url=\${SONARQUBE_HOST} \
-                            -Dsonar.login=\${SONARQUBE_TOKEN} \
+                            -Dsonar.sources=/usr/src/Task2/flask-app \
+                            -Dsonar.host.url=${SONARQUBE_HOST} \
+                            -Dsonar.login=${SONARQUBE_TOKEN}
                         """
                     }
                 }
