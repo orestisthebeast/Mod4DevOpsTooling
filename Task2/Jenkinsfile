@@ -1,0 +1,61 @@
+pipeline {
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-PAT')
+    }
+    stages {
+        stage('Cleanup') {
+            steps {
+                echo 'Cleaning up previous containers..'
+                sh 'docker ps -a -q | grep . && docker rm -f $(docker ps -a -q) || true'
+                sh 'pwd && ls -la'
+            }
+        }
+        stage('Build infrastructure') {
+            steps {
+                echo 'Building network and colume:'
+                sh 'docker network create my_network'
+                sh 'docker volume create my_volume'
+            }
+        }
+        stage('Build Containers') {
+            steps {
+                echo 'Building from Dockerfile..'
+                sh 'docker build -t my_flask_image ./flask-app'
+                sh 'build -t my_mysql_image ./db'
+            }
+        }
+        stage('Run Containers') {
+            steps {
+                echo 'Starting containers....'
+                sh 'docker run -d --name mysql_container --network my_network --network-alias mysql --mount type=volume,source=new-volume,target=/var/lib/mysql my_mysql_image'
+                sh 'docker run -d -p 5000:5000 --name flask_container --network my_network my_flask_image'
+                sh 'docker run -d -p 80:80 --name nginx_container --network my_network --mount type=bind,source=$(pwd)/nginx/nginx.conf,target=/etc/nginx/nginx.conf nginx'
+            }
+        }
+        stage('Show running containers') {
+            steps {
+                echo 'Showing running containers..'
+                sh 'docker ps -a'
+                sh 'curl localhost:80'
+            }
+        }
+        stage('Push images to Docker hub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-PAT', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    sh 'docker login -u $USERNAME -p $PASSWORD'
+                    sh 'docker tag my_flask_image $USERNAME/my_flask_image'
+                    sh 'docker tag my_mysql_image $USERNAME/my_mysql_image'
+                    sh 'docker tag nginx $USERNAME/nginx'
+                    sh 'docker push $USERNAME/my_flask_image'
+                    sh 'docker push $USERNAME/my_mysql_image'
+                    sh 'docker push $USERNAME/nginx'
+                }
+            }
+        }
+        stage('Post Build') {
+            steps {
+                echo 'Containers are up and running, and pushed to Docker hub! ..hopefully'
+            }
+        }
+    }
+}
