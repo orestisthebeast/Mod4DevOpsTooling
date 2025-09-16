@@ -18,3 +18,4 @@ A bind mount should be used to move the createTabkle.sql into the container
 
 app.py requires the mysql password to be added to line 8 replacing [PASSWORD]
 
+Test for codex. What is 2 + 2?
